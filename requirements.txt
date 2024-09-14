@@ -1,8 +1,4 @@
-streamlit
+streamlit==1.38.0
 torch
-pip install -r requirements.txt
-pip install torch torchvision torchaudio
-!pip install "unsloth[colab-new] @ git+https://github.com/unslothai/unsloth.git"
-!pip install bitsandbytes triton xformers peft accelerate trl
 transformers
 unsloth
