@@ -86,21 +86,19 @@ if contract_management == "Contract Clause Generation":
         clause = None
 
     def generate_contract(prompt_text):
-    # Create the Alpaca-style prompt for contract clause generation
-    instruction = "Generate a contract clause based on the following prompt:"
-    input_text = f"### Instruction:\n{instruction}\n### Input:\n{prompt_text}\n### Response:\n"
+        # Create the Alpaca-style prompt for contract clause generation
+        instruction = "Generate a contract clause based on the following prompt:"
+        input_text = f"### Instruction:\n{instruction}\n### Input:\n{prompt_text}\n### Response:\n"
+        # Fallback to CPU if CUDA is unavailable
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        # Tokenize the input and pass it to the LLM model
+        inputs = tokenizer(input_text, return_tensors="pt", padding=True, truncation=True).to(device)
+        generated_ids = model.generate(**inputs, max_new_tokens=500)
     
-    # Fallback to CPU if CUDA is unavailable
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+        # Decode the generated output
+        generated_text = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
     
-    # Tokenize the input and pass it to the LLM model
-    inputs = tokenizer(input_text, return_tensors="pt", padding=True, truncation=True).to(device)
-    generated_ids = model.generate(**inputs, max_new_tokens=500)
-    
-    # Decode the generated output
-    generated_text = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
-    
-    return generated_text
+        return generated_text
 
 
     # Auto-filled Text Area for Prompt
@@ -130,22 +128,22 @@ elif contract_management == "Contract Clause Validation":
 
 
     # Helper function to use the LLM model for validation
-def validate_contract_text(input_context):
-    # Create the Alpaca-style prompt for validation
-    instruction = "Validate and rate the following clause on a scale of 1 to 10:"
-    input_text = f"### Instruction:\n{instruction}\n### Input:\n{input_context}\n### Response:\n"
-
-    # Fallback to CPU if CUDA is unavailable
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    def validate_contract_text(input_context):
+        # Create the Alpaca-style prompt for validation
+        instruction = "Validate and rate the following clause on a scale of 1 to 10:"
+        input_text = f"### Instruction:\n{instruction}\n### Input:\n{input_context}\n### Response:\n"
     
-    # Tokenize the input and pass it to the LLM model
-    inputs = tokenizer(input_text, return_tensors="pt", padding=True, truncation=True).to(device)
-    generated_ids = model.generate(**inputs, max_new_tokens=500)
-    
-    # Decode the generated output
-    generated_text = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
-    
-    return generated_text
+        # Fallback to CPU if CUDA is unavailable
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        
+        # Tokenize the input and pass it to the LLM model
+        inputs = tokenizer(input_text, return_tensors="pt", padding=True, truncation=True).to(device)
+        generated_ids = model.generate(**inputs, max_new_tokens=500)
+        
+        # Decode the generated output
+        generated_text = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
+        
+        return generated_text
 
 
     
