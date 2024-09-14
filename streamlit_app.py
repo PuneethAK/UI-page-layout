@@ -1,7 +1,15 @@
 import streamlit as st
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from unsloth import FastLanguageModel
 
 # Contract Clause Generation
 st.title("Pharmaceutical Contract Management")
+
+# Load your trained LLM model and tokenizer
+model_dir = "/path/to/your/model/directory"
+model = FastLanguageModel.from_pretrained(model_dir)
+tokenizer = AutoTokenizer.from_pretrained(model_dir)
 
 st.sidebar.header("Contract Clause Generation")
 
@@ -86,6 +94,17 @@ validation_type = st.sidebar.selectbox(
     ["--Select--", "Contract Validation using PDF", "Contract Validation using Text"]
 )
 
+# Helper function to use the LLM model for validation
+def validate_contract_text(input_context):
+    instruction = "Validate and rate the following clause on a scale of 1 to 10:"
+    input_text = f"### Instruction:\n{instruction}\n### Input:\n{input_context}\n### Response:\n"
+
+    inputs = tokenizer(input_text, return_tensors="pt", padding=True, truncation=True).to("cuda")
+    generated_ids = model.generate(**inputs, max_new_tokens=500)
+    generated_text = tokenizer.decode(generated_ids[0], skip_special_tokens=True)
+    
+    return generated_text
+
 # If the user selects "Contract Validation using PDF"
 if validation_type == "Contract Validation using PDF":
     st.sidebar.write("Upload a contract for validation:")
@@ -96,7 +115,8 @@ if validation_type == "Contract Validation using PDF":
         st.write("File uploaded successfully!")
         st.write("Performing validation checks...")
         
-        # Sample Validation (This is where you'd implement actual logic)
+        # Perform PDF extraction and LLM validation logic here
+        # Sample validation (This is where you'd implement actual logic)
         st.checkbox("Check for Compliance with Regulations", value=True)
         st.checkbox("Check for Consistency", value=True)
         st.checkbox("Check for Missing Clauses", value=False)
@@ -115,7 +135,8 @@ elif validation_type == "Contract Validation using Text":
     if st.button("Validate"):
         if contract_text:
             st.write("Validating the provided contract text...")
-            # Add your logic for text validation here
-            st.success("Contract text validation completed successfully!")
+            # Use the LLM model for validation
+            validation_result = validate_contract_text(contract_text)
+            st.write(validation_result)
         else:
             st.error("Please enter contract text to validate.")
