@@ -9,8 +9,17 @@ st.title("Pharmaceutical Contract Management")
 model_dir = "/path/to/your/model/directory"
 #model = FastLanguageModel.from_pretrained(model_dir)
 #tokenizer = AutoTokenizer.from_pretrained(model_dir)
-
-st.sidebar.header("Contract Clause Generation")
+st.sidebar.header("contract clause Management")
+contract_management= st.sidebar.selectbox(
+    "select generate or validate",
+    [
+        "--Select--",
+        "Contract Clause Generation",
+        "Contract Clause Validation"
+    ]
+)
+if contract_management =="Contract Clause Generation":
+    st.sidebar.header("Contract Clause Generation")
 
 # Dropdown for Type of Agreement
 agreement_type = st.sidebar.selectbox(
@@ -84,7 +93,13 @@ if clause != "--Select--" and clause is not None:
 if st.sidebar.button("Generate Clause"):
     st.success(f"{clause} clause for {agreement_type} generated successfully.")
 
-# Contract Clause Validation
+
+
+
+
+
+elif contract_management =="Contract Clause Validation":
+    # Contract Clause Validation
 st.sidebar.header("Contract Clause Validation")
 
 # Dropdown for Contract Validation type (PDF or Text)
