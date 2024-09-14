@@ -111,9 +111,9 @@ if contract_management == "Contract Clause Generation":
 
     # Button to Generate Clause
     if st.sidebar.button("Generate Clause"):
-    generated_clause = generate_contract(prompt_text)
-    st.success(f"Generated {clause} clause for {agreement_type}:")
-    st.write(generated_clause)
+        generated_clause = generate_contract(prompt_text)
+        st.success(f"Generated {clause} clause for {agreement_type}:")
+        st.write(generated_clause)
 
 #CONTRACT CLAUSES VALIDATION
 elif contract_management == "Contract Clause Validation":
