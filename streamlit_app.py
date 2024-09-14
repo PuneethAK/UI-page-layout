@@ -7,8 +7,8 @@ st.title("Pharmaceutical Contract Management")
 
 # Load your trained LLM model and tokenizer
 model_dir = "/path/to/your/model/directory"
-model = FastLanguageModel.from_pretrained(model_dir)
-tokenizer = AutoTokenizer.from_pretrained(model_dir)
+#model = FastLanguageModel.from_pretrained(model_dir)
+#tokenizer = AutoTokenizer.from_pretrained(model_dir)
 
 st.sidebar.header("Contract Clause Generation")
 
