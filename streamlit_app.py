@@ -1,4 +1,4 @@
-pip install torch torchvision torchaudio
+uv pip install torch torchvision torchaudio
 import streamlit as st
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
